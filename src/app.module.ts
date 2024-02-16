@@ -14,6 +14,9 @@ import {
 } from './config/config.claves';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ProductosModule } from './modules/productos/productos.module';
+import { VentasModule } from './modules/ventas/ventas.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -46,6 +49,9 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     AuthModule,
     UsersModule,
+    ProductosModule,
+    VentasModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
