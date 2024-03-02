@@ -11,12 +11,19 @@ import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/common/decorator/auth.decorator';
+import { Resources } from 'src/app.roles';
 
 @ApiTags('productos')
 @Controller('productos')
 export class ProductosController {
   constructor(private readonly productosService: ProductosService) {}
 
+  @Auth({
+    resource: Resources.productos,
+    action: 'create',
+    possession: 'own',
+  })
   @Post()
   async create(
     @Body() createProductoDto: CreateProductoDto,
@@ -33,6 +40,11 @@ export class ProductosController {
     };
   }
 
+  @Auth({
+    resource: Resources.productos,
+    action: 'read',
+    possession: 'own',
+  })
   @Get()
   async findAll() {
     const data = await this.productosService.obtenerProductos();
@@ -43,6 +55,11 @@ export class ProductosController {
     };
   }
 
+  @Auth({
+    resource: Resources.productos,
+    action: 'read',
+    possession: 'own',
+  })
   @Get(':id')
   async findOne(@Param('id') id: number) {
     const data = await this.productosService.obtenerProductoPorId(id);
@@ -53,6 +70,11 @@ export class ProductosController {
     };
   }
 
+  @Auth({
+    resource: Resources.productos,
+    action: 'update',
+    possession: 'own',
+  })
   @Patch(':id')
   async update(
     @Param('id') id: number,
@@ -71,6 +93,11 @@ export class ProductosController {
     };
   }
 
+  @Auth({
+    resource: Resources.productos,
+    action: 'delete',
+    possession: 'own',
+  })
   @Delete(':id')
   async remove(@Param('id') id: number) {
     const data = await this.productosService.eliminarProducto(id);

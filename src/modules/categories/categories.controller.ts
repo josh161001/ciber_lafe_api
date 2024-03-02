@@ -11,12 +11,19 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/common/decorator/auth.decorator';
+import { Resources } from 'src/app.roles';
 
 @ApiTags('categories')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
+  @Auth({
+    resource: Resources.categories,
+    action: 'create',
+    possession: 'any',
+  })
   @Post()
   async create(@Body() createCategoryDto: CreateCategoryDto) {
     const data = await this.categoriesService.crearCategoria(createCategoryDto);
@@ -27,6 +34,11 @@ export class CategoriesController {
     };
   }
 
+  @Auth({
+    resource: Resources.categories,
+    action: 'read',
+    possession: 'own',
+  })
   @Get()
   async findAll() {
     const data = await this.categoriesService.obtenerCategorias();
@@ -37,6 +49,11 @@ export class CategoriesController {
     };
   }
 
+  @Auth({
+    resource: Resources.categories,
+    action: 'read',
+    possession: 'own',
+  })
   @Get(':id')
   async findOne(@Param('id') id: number) {
     const data = await this.categoriesService.obtenerCategoriaPorId(id);
@@ -47,6 +64,11 @@ export class CategoriesController {
     };
   }
 
+  @Auth({
+    resource: Resources.categories,
+    action: 'update',
+    possession: 'any',
+  })
   @Patch(':id')
   async update(
     @Param('id') id: number,
@@ -63,6 +85,11 @@ export class CategoriesController {
     };
   }
 
+  @Auth({
+    resource: Resources.categories,
+    action: 'delete',
+    possession: 'any',
+  })
   @Delete(':id')
   async remove(@Param('id') id: number) {
     const data = await this.categoriesService.eliminarCategoria(id);

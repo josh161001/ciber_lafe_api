@@ -30,7 +30,7 @@ export class UsersService {
     });
 
     if (emailExiste) {
-      throw new BadRequestException('El email ya está registrado');
+      throw new BadRequestException('El email ya esta registrado');
     }
 
     const usuario = this.userRepository.create(createUserDto);
@@ -38,7 +38,7 @@ export class UsersService {
     //encripta la contraseña del usuario y lo guarda
     const nuevoUsuario = this.userRepository.save({
       ...usuario,
-      contraseña: await hash(usuario.contraseña, 10),
+      contraseña: await hash(createUserDto.contraseña, 10),
     });
 
     delete (await nuevoUsuario).contraseña;
@@ -64,8 +64,6 @@ export class UsersService {
       throw new NotFoundException('El usuario no existe');
     }
 
-    delete usuario.contraseña;
-
     return usuario;
   }
 
@@ -79,9 +77,12 @@ export class UsersService {
 
     Object.assign(usuario, updateUserDto);
 
-    const { contraseña, ...resto } = usuario;
+    if (updateUserDto.contraseña) {
+      const nuevContrasena = await hash(updateUserDto.contraseña, 10);
+      usuario.contraseña = nuevContrasena;
+    }
 
-    return await this.userRepository.save(resto);
+    return await this.userRepository.save(usuario);
   }
 
   //elimina usuario por id

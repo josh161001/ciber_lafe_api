@@ -26,7 +26,10 @@ export class Producto {
   @Column({ type: 'float' })
   precio_venta: number;
 
-  @ManyToOne(() => Category, (category) => category.producto)
+  @ManyToOne(() => Category, (category) => category.producto, {
+    eager: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 }

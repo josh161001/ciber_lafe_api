@@ -1,5 +1,13 @@
+import { AppRoles } from 'src/app.roles';
+import { Asistencia } from 'src/modules/asistencia/entities/asistencia.entity';
 import { Venta } from 'src/modules/ventas/entities/venta.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -21,20 +29,21 @@ export class User {
   @Column({ type: 'varchar', length: 60, nullable: false })
   contraseña: string;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-  })
-  hora_ingreso: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
+    type: 'simple-array',
     nullable: false,
+    default: AppRoles.USER,
   })
-  hora_salida: Date;
+  roles: string[];
 
-  @OneToMany(() => Venta, (venta) => venta.usuario)
+  @OneToMany(() => Venta, (venta) => venta.usuario, {
+    onDelete: 'SET NULL',
+  })
   ventas: Venta[];
+
+  @OneToMany(() => Asistencia, (asistencia) => asistencia.user, {})
+  asitencias: Asistencia[];
 }

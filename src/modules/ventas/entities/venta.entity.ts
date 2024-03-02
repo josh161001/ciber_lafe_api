@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -13,7 +14,7 @@ export class Venta {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   fecha_venta: Date;
 
   @Column({ type: 'float' })
@@ -22,7 +23,10 @@ export class Venta {
   @Column('jsonb', { nullable: true })
   venta_productos: { producto_id: number; cantidad: number }[];
 
-  @ManyToOne(() => User, (user) => user.ventas)
+  @ManyToOne(() => User, (user) => user.ventas, {
+    eager: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'user_id' })
   usuario: User;
 }

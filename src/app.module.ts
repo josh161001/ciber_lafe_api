@@ -17,6 +17,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProductosModule } from './modules/productos/productos.module';
 import { VentasModule } from './modules/ventas/ventas.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { AccessControlModule } from 'nest-access-control';
+import { roles } from './app.roles';
+import { AsistenciaModule } from './modules/asistencia/asistencia.module';
 
 @Module({
   imports: [
@@ -47,11 +50,13 @@ import { CategoriesModule } from './modules/categories/categories.module';
         entities: ['dist/**/*/*.entity{.ts,.js}'],
       }),
     }),
+    AccessControlModule.forRoles(roles),
     AuthModule,
     UsersModule,
     ProductosModule,
     VentasModule,
     CategoriesModule,
+    AsistenciaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

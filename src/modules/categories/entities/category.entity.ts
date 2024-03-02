@@ -9,6 +9,8 @@ export class Category {
   @Column({ type: 'varchar', length: 255 })
   nombre: string;
 
-  @OneToMany(() => Producto, (producto) => producto.category)
+  @OneToMany(() => Producto, (producto) => producto.category, {
+    onDelete: 'SET NULL',
+  })
   producto: Producto[];
 }
